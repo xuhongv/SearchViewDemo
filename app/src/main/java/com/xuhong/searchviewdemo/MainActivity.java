@@ -13,5 +13,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mRippleView= (RippleView) findViewById(R.id.RippleView);
         mRippleView.startRippleAnimation();
+        //mRippleView.stopRippleAnimation();//结束动画
+        mRippleView.setAnimationProgressListener(new RippleView.AnimationListener() {
+            @Override
+            public void startAnimation() {
+                //开始动画了
+            }
+
+            @Override
+            public void EndAnimation() {
+                //结束动画了
+            }
+        });
     }
 }

@@ -71,25 +71,23 @@ public class RippleView extends RelativeLayout {
 
 
     private void init() {
-
+        //画每个圆的时间间隔为一个圆的动画时间除以总共出现圆的个数，达到每个圆出现的时间间隔一致
         rippleDelay = rippleDurationTime / rippleAmount;
         //初始化画笔
         paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setStyle(Paint.Style.FILL);
+        paint.setStyle(Paint.Style.STROKE);
         paint.setColor(rippleColor);
-
+        //布局 管理器，让圆剧中显示
         LayoutParams rippleParams = new LayoutParams((int) (2 * (rippleRadius + rippleStrokeWidth)), (int) (2 * (rippleRadius + rippleStrokeWidth)));
         rippleParams.addRule(CENTER_IN_PARENT, TRUE);
 
         animatorSet = new AnimatorSet();
-
         animatorSet.setDuration(rippleDurationTime);
         //加速插值器
         animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+        //圆圈的集合
         ArrayList<Animator> animatorList = new ArrayList<>();
-
-
         //缩放、渐变动画
         for (int i = 0; i < rippleAmount; i++) {
 
@@ -97,54 +95,56 @@ public class RippleView extends RelativeLayout {
             addView(rippleView, rippleParams);
             rippleViewList.add(rippleView);
 
-//            float rippleScale = 6.0f;
-//            final ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(rippleView, "ScaleX", 1.0f, rippleScale);
-//            scaleXAnimator.setRepeatCount(ValueAnimator.INFINITE);
-//            scaleXAnimator.setRepeatMode(ObjectAnimator.RESTART);
-//            scaleXAnimator.setStartDelay(i * rippleDelay);
-//            animatorList.add(scaleXAnimator);
-//
-//            final ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(rippleView, "ScaleY", 1.0f, rippleScale);
-//            scaleYAnimator.setRepeatCount(ValueAnimator.INFINITE);
-//            scaleYAnimator.setRepeatMode(ObjectAnimator.RESTART);//ObjectAnimator.RESTART
-//            scaleYAnimator.setStartDelay(i * rippleDelay);
-//            animatorList.add(scaleYAnimator);
-//
-//            final ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(rippleView, "Alpha", 1.0f, 0f);
-//            alphaAnimator.setRepeatCount(ValueAnimator.INFINITE);
-//            alphaAnimator.setRepeatMode(ObjectAnimator.RESTART);
-//            alphaAnimator.setStartDelay(i * rippleDelay);
-//            animatorList.add(alphaAnimator);
+            //伸缩动画
+            float rippleScale = 6.0f;
+            final ObjectAnimator scaleXAnimator = ObjectAnimator.ofFloat(rippleView, "ScaleX", 1.0f, rippleScale);
+            scaleXAnimator.setRepeatCount(ValueAnimator.INFINITE);
+            scaleXAnimator.setRepeatMode(ObjectAnimator.RESTART);
+            scaleXAnimator.setStartDelay(i * rippleDelay);
+            animatorList.add(scaleXAnimator);
+
+            final ObjectAnimator scaleYAnimator = ObjectAnimator.ofFloat(rippleView, "ScaleY", 1.0f, rippleScale);
+            scaleYAnimator.setRepeatCount(ValueAnimator.INFINITE);
+            scaleYAnimator.setRepeatMode(ObjectAnimator.RESTART);//ObjectAnimator.RESTART
+            scaleYAnimator.setStartDelay(i * rippleDelay);
+            animatorList.add(scaleYAnimator);
+
+            //透明度动画
+            final ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(rippleView, "Alpha", 1.0f, 0f);
+            alphaAnimator.setRepeatCount(ValueAnimator.INFINITE);
+            alphaAnimator.setRepeatMode(ObjectAnimator.RESTART);
+            alphaAnimator.setStartDelay(i * rippleDelay);
+            animatorList.add(alphaAnimator);
 
         }
         //开始动画
-        //animatorSet.playTogether(animatorList);
+        animatorSet.playTogether(animatorList);
         //动画的监听
-//        animatorSet.addListener(new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animator) {
-//                if (mAnimationProgressListener != null) {
-//                    mAnimationProgressListener.startAnimation();
-//                }
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animator) {
-//                if (mAnimationProgressListener != null) {
-//                    mAnimationProgressListener.EndAnimation();
-//                }
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animator) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animator) {
-//
-//            }
-//        });
+        animatorSet.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+                if (mAnimationProgressListener != null) {
+                    mAnimationProgressListener.startAnimation();
+                }
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                if (mAnimationProgressListener != null) {
+                    mAnimationProgressListener.EndAnimation();
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
     }
 
 
